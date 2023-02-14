@@ -702,6 +702,9 @@ public class HttpHeadersTests {
 
 		HttpHeaders readOnlyHttpHeaders = HttpHeaders.readOnlyHttpHeaders(headers);
 		assertThat(readOnlyHttpHeaders.entrySet()).extracting(Entry::getKey).containsExactly(expectedKeys);
+		// the value list should not be mutable
+		assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() ->
+			readOnlyHttpHeaders.entrySet().iterator().next().getValue().add("another"));
 	}
 
 	@Test // gh-25034

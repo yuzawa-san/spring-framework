@@ -1887,7 +1887,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 		if (headers == EMPTY) {
 			return new HttpHeaders();
 		}
-		return (headers instanceof ReadOnlyHttpHeaders ? new HttpHeaders(headers.headers) : headers);
+		return (headers instanceof ReadOnlyHttpHeaders readOnlyHeaders ? new HttpHeaders(readOnlyHeaders.originalHeaders) : headers);
 	}
 
 	/**
