@@ -717,7 +717,7 @@ public class HttpHeadersTests {
 		assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() ->
 			src.add("foo", "blah"));
 	}
-	
+
 	@Test // gh-25034
 	void equalsUnwrapsHttpHeaders() {
 		HttpHeaders headers1 = new HttpHeaders();
