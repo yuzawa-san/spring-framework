@@ -702,11 +702,22 @@ public class HttpHeadersTests {
 
 		HttpHeaders readOnlyHttpHeaders = HttpHeaders.readOnlyHttpHeaders(headers);
 		assertThat(readOnlyHttpHeaders.entrySet()).extracting(Entry::getKey).containsExactly(expectedKeys);
-		// the value list should not be mutable
-		assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() ->
-			readOnlyHttpHeaders.entrySet().iterator().next().getValue().add("another"));
 	}
 
+	@Test
+	void readOnlyHttpHeadersImmutableValues() {
+		HttpHeaders original = new HttpHeaders();
+		original.set("foo", "bar");
+		HttpHeaders src = HttpHeaders.readOnlyHttpHeaders(original);
+		assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() ->
+			src.entrySet().iterator().next().getValue().add("blah"));
+		HttpHeaders dst = new HttpHeaders();
+		src.forEach(dst::putIfAbsent);
+		assertThat(src.containsKey("foo")).isTrue();
+		assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() ->
+			src.add("foo", "blah"));
+	}
+	
 	@Test // gh-25034
 	void equalsUnwrapsHttpHeaders() {
 		HttpHeaders headers1 = new HttpHeaders();
