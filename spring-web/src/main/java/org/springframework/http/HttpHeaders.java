@@ -1828,6 +1828,11 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	}
 
 	@Override
+	public List<String> putIfAbsent(String key, List<String> value) {
+		return this.headers.putIfAbsent(key, value);
+	}
+
+	@Override
 	public boolean equals(@Nullable Object obj) {
 		if (this == obj) {
 			return true;

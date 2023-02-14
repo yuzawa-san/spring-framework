@@ -140,6 +140,12 @@ public class MultiValueMapAdapter<K, V> implements MultiValueMap<K, V>, Serializ
 
 	@Override
 	@Nullable
+	public List<V> putIfAbsent(K key, List<V> value) {
+		return this.targetMap.putIfAbsent(key, value);
+	}
+
+	@Override
+	@Nullable
 	public List<V> remove(Object key) {
 		return this.targetMap.remove(key);
 	}
