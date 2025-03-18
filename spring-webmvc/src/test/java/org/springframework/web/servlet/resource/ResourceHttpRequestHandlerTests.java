@@ -465,11 +465,13 @@ class ResourceHttpRequestHandlerTests {
 
 		@Test
 		void shouldRespondWithNotModifiedWhenModifiedSince() throws Exception {
+			this.handler.setCacheSeconds(3600);
 			this.handler.afterPropertiesSet();
 			this.request.setAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, "foo.css");
 			this.request.addHeader("If-Modified-Since", resourceLastModified("test/foo.css"));
 			this.handler.handleRequest(this.request, this.response);
 			assertThat(this.response.getStatus()).isEqualTo(HttpServletResponse.SC_NOT_MODIFIED);
+			assertThat(this.response.getHeader("Cache-Control")).isEqualTo("max-age=3600");
 		}
 
 		@Test
@@ -484,12 +486,14 @@ class ResourceHttpRequestHandlerTests {
 
 		@Test
 		void shouldRespondWithNotModifiedWhenEtag() throws Exception {
+			this.handler.setCacheSeconds(3600);
 			this.handler.setEtagGenerator(resource -> "testEtag");
 			this.handler.afterPropertiesSet();
 			this.request.setAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, "foo.css");
 			this.request.addHeader("If-None-Match", "\"testEtag\"");
 			this.handler.handleRequest(this.request, this.response);
 			assertThat(this.response.getStatus()).isEqualTo(HttpServletResponse.SC_NOT_MODIFIED);
+			assertThat(this.response.getHeader("Cache-Control")).isEqualTo("max-age=3600");
 		}
 
 		@Test
